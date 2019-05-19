@@ -1,17 +1,18 @@
 import React from 'react'
 
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router'
+import { AlbumsPage } from '../AlbumsPage'
+import { FavouritePage } from '../FavouritePage'
 import { Navbar } from './../../components'
 
 const Main = (props: RouteComponentProps) => {
   const baseUrl = props.match.url
-  console.log(baseUrl)
   return (
     <>
       <Navbar />
       <Switch>
-        <Route path={`${baseUrl}/fav`} render={() => <div className="nav-margin">Fav</div>} />
-        <Route path={`${baseUrl}/albums`} render={() => <div className="nav-margin">Albums</div>} />
+        <Route path={`${baseUrl}/fav`} component={FavouritePage} />
+        <Route path={`${baseUrl}/albums`} component={AlbumsPage} />
         <Redirect to={`${baseUrl}/fav`} from={`${baseUrl}`} exact={true} />
       </Switch>
     </>
