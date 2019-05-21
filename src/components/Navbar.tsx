@@ -1,21 +1,32 @@
 import React from 'react'
+import { Link, NavLink } from 'react-router-dom'
 
-const navbar = () => (
-  <nav className="navbar is-fixed-top" role="navigation" aria-label="main navigation">
-    <div className="navbar-brand">
-      <h2>Photo Hub</h2>
-      <a role="button" className="navbar-burger burger" aria-label="menu" aria-expanded="false">
-        <span aria-hidden="true" />
-        <span aria-hidden="true" />
-        <span aria-hidden="true" />
-      </a>
+interface IItem {
+  text: string
+  link: string
+}
+
+interface IProps {
+  items: IItem[]
+  header: string
+}
+
+const getLinks = (items: IItem[]) => {
+  return items.map(p => (
+    <NavLink activeClassName="has-background-info	" className="navbar-item" to={p.link} key={p.text}>
+      {p.text}
+    </NavLink>
+  ))
+}
+
+const navbar = (props: IProps) => (
+  <nav className="navbar is-fixed-top is-dark" role="navigation" aria-label="main navigation">
+    <div className="navbar-item">
+      <span className="has-text-weight-bold is-size-4 has-text-light">{props.header}</span>
     </div>
 
     <div className="navbar-menu">
-      <div className="navbar-start">
-        <a className="navbar-item">Home</a>
-        <a className="navbar-item">Documentation</a>
-      </div>
+      <div className="navbar-start">{getLinks(props.items)}</div>
     </div>
   </nav>
 )
