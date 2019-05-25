@@ -6,6 +6,7 @@
   "rules": {
     "semicolon": false,
     "quotemark": [true, "single", "jsx-double"],
-    "trailing-comma": false
+    "trailing-comma": false,
+    "curly": false
   }
 }

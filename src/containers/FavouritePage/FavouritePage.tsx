@@ -12,7 +12,7 @@ const getPhotos = () => {
 const FavouritePage = () => {
   return (
     <div>
-      <div className="columns is-multiline">
+      <div className="columns is-multiline is-mobile">
         <div className="column is-full">
           <div className="skeleton" />
         </div>
