@@ -1,27 +1,38 @@
 import React from 'react'
 
-import { Col, Row } from 'antd'
+import { List } from 'immutable'
+import { connect } from 'react-redux'
 import { Photo } from '../../components'
+import { IPhoto } from '../../core'
+import { IState, getFavPhotos } from '../../store'
 
-const getPhotos = () => {
-  return [0, 1, 2, 4, 5, 6, 7, 89, 1, 2, 3, 4, 6, 3].map((p, i) => (
+interface IProps {
+  photos: List<IPhoto>
+}
+
+const getPhotos = (photos: List<IPhoto>) => {
+  return photos.map((p, i) => (
     <div className="column is-narrow" key={i}>
-      <Photo />
+      <Photo url={p.url} />
     </div>
   ))
 }
 
-const FavouritePage = () => {
+const FavouritePage = (props: IProps) => {
   return (
     <div className="photo-grid">
       <div className="columns is-multiline is-gapless is-mobile">
         <div className="column is-full">
           <div className="skeleton" />
         </div>
-        {getPhotos()}
+        {getPhotos(props.photos)}
       </div>
     </div>
   )
 }
 
-export default FavouritePage
+const mapStateToProps = (state: IState) => ({
+  photos: getFavPhotos(state)
+})
+
+export default connect(mapStateToProps)(FavouritePage)
