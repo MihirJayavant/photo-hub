@@ -6,7 +6,7 @@ import { AppRoutes } from './AppRoutes'
 const App = () => {
   return (
     <BrowserRouter>
-      <div className="App has-text-white has-background-black">
+      <div className="App has-text-white has-background-black dark-scroll">
         <AppRoutes />
       </div>
     </BrowserRouter>

@@ -1,5 +1,7 @@
 @import "../node_modules/bulma/bulma"
 
+*
+  box-sizing: border-box
 
 html
   height: 100%
@@ -15,11 +17,14 @@ body
   overflow-x: hidden
 
 .skeleton
-  height: 40px
+  height: 50px
 
 .photo
-  box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)
-  margin: 5px
-  border-radius: 4px
-  img
-    border-radius: 4px
+  margin: 10px
+  width: 150px
+
+  &:hover
+    box-shadow: 6px 5px 20px 0 hsl(217, 71%, 53%), 5px 5px 20px 0 rgba(0, 0, 0, 0.19)
+
+.photo-grid
+  width: 100%
