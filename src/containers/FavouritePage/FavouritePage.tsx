@@ -4,7 +4,9 @@ import { List } from 'immutable'
 import { connect } from 'react-redux'
 import { Photo } from '../../components'
 import { IPhoto } from '../../core'
-import { IState, getFavPhotos } from '../../store'
+import { getFavPhotos, IState } from '../../store'
+
+import { dialog } from 'electron'
 
 interface IProps {
   photos: List<IPhoto>
@@ -18,6 +20,12 @@ const getPhotos = (photos: List<IPhoto>) => {
   ))
 }
 
+const onAddClick = () => {
+  // dialog.showOpenDialog({ properties: ['multiSelections', 'openFile'] }, files =>
+  //   console.log(files)
+  // )
+}
+
 const FavouritePage = (props: IProps) => {
   return (
     <div className="photo-grid">
@@ -27,6 +35,11 @@ const FavouritePage = (props: IProps) => {
         </div>
         {getPhotos(props.photos)}
       </div>
+      <button className="floating-btn" onClick={onAddClick}>
+        <span className="icon">
+          <i className="fas fa-plus" />
+        </span>
+      </button>
     </div>
   )
 }
