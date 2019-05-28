@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain, dialog } from 'electron'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -21,6 +21,12 @@ function createWindow() {
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
+
+  ipcMain.on('open-filepicker-for-pics', (event: any) => {
+    dialog.showOpenDialog(
+      { properties: ['multiSelections', 'openFile'] },
+      files => event.sender.send('selected-pic', files))
+  })
 
   // Emitted when the window is closed.
   mainWindow.on('closed', () => {

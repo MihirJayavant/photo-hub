@@ -6,7 +6,19 @@ import { Photo } from '../../components'
 import { IPhoto } from '../../core'
 import { getFavPhotos, IState } from '../../store'
 
-import { dialog } from 'electron'
+import { IpcRenderer } from 'electron'
+
+declare global {
+  interface Window {
+    require: (
+      module: 'electron'
+    ) => {
+      ipcRenderer: IpcRenderer
+    }
+  }
+}
+
+const { ipcRenderer } = window.require('electron')
 
 interface IProps {
   photos: List<IPhoto>
@@ -20,10 +32,12 @@ const getPhotos = (photos: List<IPhoto>) => {
   ))
 }
 
+ipcRenderer.on('selected-pic', (event: any, files: any) => {
+  console.log(files)
+})
+
 const onAddClick = () => {
-  // dialog.showOpenDialog({ properties: ['multiSelections', 'openFile'] }, files =>
-  //   console.log(files)
-  // )
+  ipcRenderer.send('open-filepicker-for-pics')
 }
 
 const FavouritePage = (props: IProps) => {

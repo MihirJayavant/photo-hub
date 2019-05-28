@@ -42,7 +42,7 @@ const mock: IPhoto[] = [
     url: 'https://en.es-static.us/upl/2017/06/ocean-sunset-Paulo-P_Pereira-Portugal.jpg'
   },
   {
-    url: 'file:///C://Users//rh0226/Downloads//BingWallpaper-2019-05-24.jpg'
+    url: 'file:///C://Users//rh0226/Documents//photos//BingWallpaper-2019-05-24.jpg'
   }
 ]
 
