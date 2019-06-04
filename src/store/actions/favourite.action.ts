@@ -6,7 +6,8 @@ import { IPhoto } from '../../core'
 export enum FavouriteActionTypes {
   LOAD = '[FavouritePage] Load',
   SUCCESS = '[FavouritePage] Success',
-  ERROR = '[FavouritePage] Error'
+  ERROR = '[FavouritePage] Error',
+  ADD = '[FavouritePage] Add'
 }
 
 // Action Interface
@@ -23,6 +24,10 @@ export interface ISuccessFavouriteAction {
 export interface IErrorFavouriteAction {
   type: FavouriteActionTypes.ERROR
   payload: { error: string }
+}
+export interface IAddFavouriteAction {
+  type: FavouriteActionTypes.ADD
+  payload: { photos: IPhoto[] }
 }
 
 // Action Creators
@@ -50,5 +55,15 @@ export function errorFavourite(error: string): IErrorFavouriteAction {
     type: FavouriteActionTypes.ERROR
   }
 }
+export function addFavourite(urls: string[]): IAddFavouriteAction {
+  const photos: IPhoto[] = urls.map(p => ({ url: p }));
+  return {
+    payload: {
+      photos
+    },
+    type: FavouriteActionTypes.ADD
+  }
+}
 
-export type FavouriteAction = ILoadFavouriteAction | ISuccessFavouriteAction | IErrorFavouriteAction
+export type FavouriteAction = ILoadFavouriteAction
+  | ISuccessFavouriteAction | IErrorFavouriteAction | IAddFavouriteAction

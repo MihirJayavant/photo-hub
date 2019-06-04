@@ -2,49 +2,7 @@ import { List } from 'immutable'
 import { getInitialState, IAsyncData, IPhoto, withAsyncDataReducer } from '../../core'
 import { FavouriteAction, FavouriteActionTypes } from '../actions'
 
-const mock: IPhoto[] = [
-  {
-    url:
-      'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg' +
-      '?cs=srgb&dl=beauty-bloom-blue-67636.jpg&fm=jpg'
-  },
-  {
-    url: 'https://en.es-static.us/upl/2017/06/ocean-sunset-Paulo-P_Pereira-Portugal.jpg'
-  },
-  {
-    url: 'https://en.es-static.us/upl/2017/06/ocean-sunset-Paulo-P_Pereira-Portugal.jpg'
-  },
-  {
-    url:
-      'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg' +
-      '?cs=srgb&dl=beauty-bloom-blue-67636.jpg&fm=jpg'
-  },
-  {
-    url: 'https://en.es-static.us/upl/2017/06/ocean-sunset-Paulo-P_Pereira-Portugal.jpg'
-  },
-  {
-    url: 'https://en.es-static.us/upl/2017/06/ocean-sunset-Paulo-P_Pereira-Portugal.jpg'
-  },
-  {
-    url:
-      'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg' +
-      '?cs=srgb&dl=beauty-bloom-blue-67636.jpg&fm=jpg'
-  },
-  {
-    url: 'https://en.es-static.us/upl/2017/06/ocean-sunset-Paulo-P_Pereira-Portugal.jpg'
-  },
-  {
-    url:
-      'https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg' +
-      '?cs=srgb&dl=beauty-bloom-blue-67636.jpg&fm=jpg'
-  },
-  {
-    url: 'https://en.es-static.us/upl/2017/06/ocean-sunset-Paulo-P_Pereira-Portugal.jpg'
-  },
-  {
-    url: 'file:///C://Users//rh0226/Documents//photos//BingWallpaper-2019-05-24.jpg'
-  }
-]
+const mock: IPhoto[] = []
 
 export interface IFavouriteState extends IAsyncData<List<IPhoto>> { }
 
@@ -53,6 +11,11 @@ export const initialState: IFavouriteState = {
 }
 
 export function baseReducer(state = initialState, action: FavouriteAction): IFavouriteState {
+  switch (action.type) {
+    case FavouriteActionTypes.ADD: return {
+      ...state, data: state.data.push(...action.payload.photos)
+    }
+  }
   return state
 }
 

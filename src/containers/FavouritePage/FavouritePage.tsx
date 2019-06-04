@@ -1,27 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import { List } from 'immutable'
 import { connect } from 'react-redux'
 import { Photo } from '../../components'
 import { IPhoto } from '../../core'
-import { getFavPhotos, IState } from '../../store'
-
-import { IpcRenderer } from 'electron'
-
-declare global {
-  interface Window {
-    require: (
-      module: 'electron'
-    ) => {
-      ipcRenderer: IpcRenderer
-    }
-  }
-}
-
-const { ipcRenderer } = window.require('electron')
+import { ElectronImagePicker } from '../../infrastructure/image-picker'
+import { addFavourite, getFavPhotos, IState } from '../../store'
 
 interface IProps {
   photos: List<IPhoto>
+  addFavourite: (url: string[]) => void
 }
 
 const getPhotos = (photos: List<IPhoto>) => {
@@ -32,15 +20,20 @@ const getPhotos = (photos: List<IPhoto>) => {
   ))
 }
 
-ipcRenderer.on('selected-pic', (event: any, files: any) => {
-  console.log(files)
-})
-
-const onAddClick = () => {
-  ipcRenderer.send('open-filepicker-for-pics')
-}
+const picker = new ElectronImagePicker()
 
 const FavouritePage = (props: IProps) => {
+  const onAddClick = () => {
+    picker.open()
+  }
+
+  useEffect(() => {
+    picker.onImageSelected(files => {
+      if (files) props.addFavourite(files)
+    })
+    return () => picker.dispose()
+  })
+
   return (
     <div className="photo-grid">
       <div className="columns is-multiline is-gapless is-mobile">
@@ -49,11 +42,11 @@ const FavouritePage = (props: IProps) => {
         </div>
         {getPhotos(props.photos)}
       </div>
-      <button className="floating-btn" onClick={onAddClick}>
+      <a className="floating-btn" onClick={onAddClick}>
         <span className="icon">
           <i className="fas fa-plus" />
         </span>
-      </button>
+      </a>
     </div>
   )
 }
@@ -62,4 +55,11 @@ const mapStateToProps = (state: IState) => ({
   photos: getFavPhotos(state)
 })
 
-export default connect(mapStateToProps)(FavouritePage)
+const mapDispatchToProps = {
+  addFavourite
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FavouritePage)
