@@ -1,6 +1,7 @@
 import { IpcRenderer } from 'electron'
 import { IImagePicker } from '../core';
 
+/* tslint:disable: interface-name */
 declare global {
   interface Window {
     require: (
@@ -13,10 +14,9 @@ declare global {
 
 const { ipcRenderer } = window.require('electron')
 
-
 export class ElectronImagePicker implements IImagePicker {
 
-  public open(): void {
+  public open() {
     ipcRenderer.send('open-filepicker-for-pics')
   }
 
@@ -24,9 +24,8 @@ export class ElectronImagePicker implements IImagePicker {
     ipcRenderer.on('selected-pic', (event: any, files: string[] | null) => callback(files))
   }
 
-  public dispose(): void {
+  public dispose() {
     ipcRenderer.removeAllListeners('selected-pic')
   }
-
 
 }
