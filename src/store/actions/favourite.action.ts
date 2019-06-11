@@ -1,5 +1,5 @@
 import { List } from 'immutable'
-import { IPhoto } from '../../core'
+import { IPhoto, IAsyncDataSuccessAction, IAsyncDataErrorAction, IAsyncDataLoadAction } from '../../core'
 
 // Action Types
 
@@ -12,18 +12,16 @@ export enum FavouriteActionTypes {
 
 // Action Interface
 
-export interface ILoadFavouriteAction {
+export interface ILoadFavouriteAction extends IAsyncDataLoadAction {
   type: FavouriteActionTypes.LOAD
 }
 
-export interface ISuccessFavouriteAction {
+export interface ISuccessFavouriteAction extends IAsyncDataSuccessAction<List<IPhoto>> {
   type: FavouriteActionTypes.SUCCESS
-  payload: { Favourite: List<IPhoto> }
 }
 
-export interface IErrorFavouriteAction {
+export interface IErrorFavouriteAction extends IAsyncDataErrorAction {
   type: FavouriteActionTypes.ERROR
-  payload: { error: string }
 }
 export interface IAddFavouriteAction {
   type: FavouriteActionTypes.ADD
@@ -40,18 +38,14 @@ export function loadFavourite(): ILoadFavouriteAction {
 
 export function successFavourite(photos: IPhoto[]): ISuccessFavouriteAction {
   return {
-    payload: {
-      Favourite: List(photos)
-    },
+    data: List(photos),
     type: FavouriteActionTypes.SUCCESS
   }
 }
 
 export function errorFavourite(error: string): IErrorFavouriteAction {
   return {
-    payload: {
-      error
-    },
+    error,
     type: FavouriteActionTypes.ERROR
   }
 }

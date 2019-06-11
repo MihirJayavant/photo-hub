@@ -20,6 +20,7 @@ export function baseReducer(state = initialState, action: FavouriteAction): IFav
 }
 
 export function reducer(state = initialState, action: FavouriteAction): IFavouriteState {
+
   return withAsyncDataReducer<List<IPhoto>, IFavouriteState>(baseReducer, {
     errorActionType: FavouriteActionTypes.ERROR,
     loadActionType: FavouriteActionTypes.LOAD,

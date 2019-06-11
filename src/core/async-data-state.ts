@@ -76,6 +76,7 @@ export function withAsyncDataReducer<TData, TState extends IAsyncData<TData>>(
           error: (action as IAsyncDataErrorAction).error
         })
     }
+
     return baseReducer(state, action)
   }
 }
