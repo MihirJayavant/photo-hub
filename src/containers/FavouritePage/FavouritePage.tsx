@@ -4,12 +4,12 @@ import { List } from 'immutable'
 import { connect } from 'react-redux'
 import { Photo } from '../../components'
 import { IPhoto } from '../../core'
-import { ElectronImagePicker } from '../../infrastructure/image-picker'
+import { ElectronImagePicker } from '../../infrastructure'
 import { addFavourite, getFavPhotos, IState } from '../../store'
 
 interface IProps {
   photos: List<IPhoto>
-  addFavourite: (url: string[]) => void
+  addFavourite: (url: string[], startPosition: number) => void
 }
 
 const getPhotos = (photos: List<IPhoto>) => {
@@ -29,7 +29,7 @@ const FavouritePage = (props: IProps) => {
 
   useEffect(() => {
     picker.onImageSelected(files => {
-      if (files) props.addFavourite(files)
+      if (files) props.addFavourite(files, props.photos.count())
     })
     return () => picker.dispose()
   })

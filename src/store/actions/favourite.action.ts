@@ -55,8 +55,8 @@ export function errorFavourite(error: string): IErrorFavouriteAction {
     type: FavouriteActionTypes.ERROR
   }
 }
-export function addFavourite(urls: string[]): IAddFavouriteAction {
-  const photos: IPhoto[] = urls.map(p => ({ url: p }));
+export function addFavourite(urls: string[], startPosition: number): IAddFavouriteAction {
+  const photos: IPhoto[] = urls.map((p, i) => ({ url: p, position: i + startPosition }));
   return {
     payload: {
       photos
