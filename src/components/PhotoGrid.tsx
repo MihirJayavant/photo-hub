@@ -2,7 +2,7 @@ import React from 'react'
 
 import { List } from 'immutable'
 import { IPhoto } from '../core'
-import { Photo } from './Photo'
+import { AdvancePhoto } from './AdvancePhoto'
 
 interface IProps {
   photos: List<IPhoto>
@@ -11,7 +11,7 @@ interface IProps {
 const getPhotos = (photos: List<IPhoto>) => {
   return photos.map(p => (
     <div className="column is-narrow" key={p.position}>
-      <Photo url={p.url} />
+      <AdvancePhoto photo={p} />
     </div>
   ))
 }
