@@ -1,4 +1,4 @@
-import { List } from 'immutable'
+import { List, Map } from 'immutable'
 import { IPhoto, IAsyncDataSuccessAction, IAsyncDataErrorAction, IAsyncDataLoadAction } from '../../core'
 
 // Action Types
@@ -7,7 +7,8 @@ export enum FavouriteActionTypes {
   LOAD = '[FavouritePage] Load',
   SUCCESS = '[FavouritePage] Success',
   ERROR = '[FavouritePage] Error',
-  ADD = '[FavouritePage] Add'
+  ADD = '[FavouritePage] Add',
+  DELETE = '[FavouritePage] Delete'
 }
 
 // Action Interface
@@ -25,7 +26,11 @@ export interface IErrorFavouriteAction extends IAsyncDataErrorAction {
 }
 export interface IAddFavouriteAction {
   type: FavouriteActionTypes.ADD
-  payload: { photos: IPhoto[] }
+  photos: IPhoto[]
+}
+export interface IDeleteFavouriteAction {
+  type: FavouriteActionTypes.DELETE
+  selectedPhotos: Map<number, IPhoto>
 }
 
 // Action Creators
@@ -52,12 +57,18 @@ export function errorFavourite(error: string): IErrorFavouriteAction {
 export function addFavourite(urls: string[], startPosition: number): IAddFavouriteAction {
   const photos: IPhoto[] = urls.map((p, i) => ({ url: p, position: i + startPosition }));
   return {
-    payload: {
-      photos
-    },
+    photos,
     type: FavouriteActionTypes.ADD
   }
 }
 
+export function deleteFavourite(selectedPhotos: Map<number, IPhoto>): IDeleteFavouriteAction {
+
+  return {
+    selectedPhotos,
+    type: FavouriteActionTypes.DELETE
+  }
+}
+
 export type FavouriteAction = ILoadFavouriteAction
-  | ISuccessFavouriteAction | IErrorFavouriteAction | IAddFavouriteAction
+  | ISuccessFavouriteAction | IErrorFavouriteAction | IAddFavouriteAction | IDeleteFavouriteAction

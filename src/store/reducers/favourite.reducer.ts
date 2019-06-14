@@ -1,5 +1,5 @@
 import { List } from 'immutable'
-import { getInitialState, IAsyncData, IPhoto, withAsyncDataReducer } from '../../core'
+import { deletePhotos, getInitialState, IAsyncData, IPhoto, withAsyncDataReducer } from '../../core'
 import { FavouriteAction, FavouriteActionTypes } from '../actions'
 
 const mock: IPhoto[] = []
@@ -13,7 +13,10 @@ export const initialState: IFavouriteState = {
 export function baseReducer(state = initialState, action: FavouriteAction): IFavouriteState {
   switch (action.type) {
     case FavouriteActionTypes.ADD: return {
-      ...state, data: state.data.push(...action.payload.photos)
+      ...state, data: state.data.push(...action.photos)
+    }
+    case FavouriteActionTypes.DELETE: return {
+      ...state, data: deletePhotos(state.data, action.selectedPhotos)
     }
   }
   return state

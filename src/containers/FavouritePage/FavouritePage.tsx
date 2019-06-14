@@ -1,24 +1,32 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { List } from 'immutable'
+import { List, Map } from 'immutable'
 import { connect } from 'react-redux'
 import { PhotoGrid } from '../../components'
 import { IPhoto } from '../../core'
 import { ElectronImagePicker } from '../../infrastructure'
-import { addFavourite, getFavPhotos, IState } from '../../store'
+import { addFavourite, deleteFavourite, getFavPhotos, IState } from '../../store'
 
 interface IProps {
   photos: List<IPhoto>
   addFavourite: (url: string[], startPosition: number) => void
+  deleteFavourite: (selectedPhotos: Map<number, IPhoto>) => void
 }
 
 const picker = new ElectronImagePicker()
 
-const FavouritePage = (props: IProps) => {
+function FavouritePage(props: IProps) {
   const { photos } = props
+  const [selectedPhoto, setSelectedPhoto] = useState(Map<number, IPhoto>())
 
   const onAddClick = () => {
-    picker.open()
+    if (selectedPhoto.count() === 0) picker.open()
+    else props.deleteFavourite(selectedPhoto)
+  }
+
+  const onSelection = (photo: IPhoto) => {
+    if (selectedPhoto.has(photo.position)) setSelectedPhoto(selectedPhoto.remove(photo.position))
+    else setSelectedPhoto(selectedPhoto.set(photo.position, photo))
   }
 
   useEffect(() => {
@@ -28,13 +36,19 @@ const FavouritePage = (props: IProps) => {
     return () => picker.dispose()
   }, [photos])
 
+  const getIcon = () => {
+    return selectedPhoto.count() === 0 ? (
+      <i className="fas fa-plus" />
+    ) : (
+      <i className="far fa-trash-alt" />
+    )
+  }
+
   return (
     <div className="photo-grid">
-      <PhotoGrid photos={photos} />
+      <PhotoGrid photos={photos} onSelection={onSelection} />
       <a className="floating-btn" onClick={onAddClick}>
-        <span className="icon">
-          <i className="fas fa-plus" />
-        </span>
+        <span className="icon">{getIcon()}</span>
       </a>
     </div>
   )
@@ -45,7 +59,8 @@ const mapStateToProps = (state: IState) => ({
 })
 
 const mapDispatchToProps = {
-  addFavourite
+  addFavourite,
+  deleteFavourite
 }
 
 export default connect(
