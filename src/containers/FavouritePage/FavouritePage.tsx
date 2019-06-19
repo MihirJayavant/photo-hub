@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import { List, Map } from 'immutable'
 import { connect } from 'react-redux'
-import { PhotoGrid } from '../../components'
 import { IPhoto } from '../../core'
 import { ElectronImagePicker } from '../../infrastructure'
 import { addFavourite, deleteFavourite, getFavPhotos, IState } from '../../store'
+import { PhotoGrid } from '../PhotoGrid'
 
 interface IProps {
   photos: List<IPhoto>
@@ -52,7 +52,7 @@ function FavouritePage(props: IProps) {
       <PhotoGrid
         photos={photos}
         onSelection={onSelection}
-        isCheckBoxVisible={true}
+        isCheckBoxVisible={selectedPhoto.count() > 0}
         selectedPhoto={selectedPhoto}
       />
       <a className="floating-btn" onClick={onBtnClick}>

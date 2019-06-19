@@ -19,17 +19,17 @@ export function AdvancePhoto(props: IProps) {
     if (!props.isCheckboxVisible) return null
 
     return (
-      <div className="photo-checkbox checkbox">
+      <label className="photo-checkbox checkbox">
         <input type="checkbox" onChange={onSelected} checked={props.isSelected} />
         <span className="checkmark" />
-      </div>
+      </label>
     )
   }
 
   return (
-    <div className="hover-effect">
-      <Photo url={props.photo.url} />
+    <div className="advance-photo">
       {getCheckbox()}
+      <Photo url={props.photo.url} />
     </div>
   )
 }

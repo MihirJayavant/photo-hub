@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import { List, Map } from 'immutable'
-import { IPhoto } from '../core'
-import { AdvancePhoto } from './AdvancePhoto'
+import { AdvancePhoto } from '../../components'
+import { IPhoto } from '../../core/index'
+
+// tslint:disable:jsx-no-lambda
 
 interface IProps {
   photos: List<IPhoto>
@@ -12,18 +14,28 @@ interface IProps {
 }
 
 export const PhotoGrid = (props: IProps) => {
+  const [mousePosition, setMousePosition] = useState(-1)
+
   const onSelection = (photo: IPhoto) => {
     if (props.onSelection) props.onSelection(photo)
   }
 
+  const onMouseEnter = (position: number) => setMousePosition(position)
+  const onMouseLeave = () => setMousePosition(-1)
+
   const getPhotos = (photos: List<IPhoto>) => {
     const { isCheckBoxVisible, selectedPhoto } = props
     return photos.map(p => (
-      <div className="column is-narrow" key={p.position}>
+      <div
+        className="column is-narrow"
+        key={p.position}
+        onMouseEnter={() => onMouseEnter(p.position)}
+        onMouseLeave={onMouseLeave}
+      >
         <AdvancePhoto
           photo={p}
           onSelected={onSelection}
-          isCheckboxVisible={isCheckBoxVisible}
+          isCheckboxVisible={isCheckBoxVisible || mousePosition === p.position}
           isSelected={selectedPhoto ? selectedPhoto.has(p.position) : false}
         />
       </div>
