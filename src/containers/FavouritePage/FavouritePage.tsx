@@ -19,9 +19,12 @@ function FavouritePage(props: IProps) {
   const { photos } = props
   const [selectedPhoto, setSelectedPhoto] = useState(Map<number, IPhoto>())
 
-  const onAddClick = () => {
+  const onBtnClick = () => {
     if (selectedPhoto.count() === 0) picker.open()
-    else props.deleteFavourite(selectedPhoto)
+    else {
+      props.deleteFavourite(selectedPhoto)
+      setSelectedPhoto(Map<number, IPhoto>())
+    }
   }
 
   const onSelection = (photo: IPhoto) => {
@@ -46,8 +49,13 @@ function FavouritePage(props: IProps) {
 
   return (
     <div className="photo-grid">
-      <PhotoGrid photos={photos} onSelection={onSelection} />
-      <a className="floating-btn" onClick={onAddClick}>
+      <PhotoGrid
+        photos={photos}
+        onSelection={onSelection}
+        isCheckBoxVisible={true}
+        selectedPhoto={selectedPhoto}
+      />
+      <a className="floating-btn" onClick={onBtnClick}>
         <span className="icon">{getIcon()}</span>
       </a>
     </div>
