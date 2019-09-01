@@ -17,7 +17,7 @@ const App = (props: IProps) => {
 
   return (
     <BrowserRouter>
-      <div className="App has-text-white has-background-black dark-scroll">
+      <div className="App has-text-white dark-scroll">
         <AppRoutes />
       </div>
     </BrowserRouter>

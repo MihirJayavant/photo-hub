@@ -20,7 +20,7 @@ const getLinks = (items: IItem[]) => {
 }
 
 const navbar = (props: IProps) => (
-  <nav className="navbar is-fixed-top is-dark" role="navigation" aria-label="main navigation">
+  <nav className="navbar is-fixed-top is-black" role="navigation" aria-label="main navigation">
     <div className="navbar-item">
       <span className="has-text-weight-bold is-size-4 has-text-light">{props.header}</span>
     </div>
