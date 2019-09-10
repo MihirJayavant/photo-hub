@@ -10,7 +10,15 @@ export interface IProps {
   onSelected?: (photo: IPhoto) => void
 }
 
-export function AdvancePhoto(props: IProps) {
+function shouldUpdate(prev: IProps, cur: IProps) {
+  return (
+    prev.isCheckboxVisible === cur.isCheckboxVisible &&
+    prev.isSelected === cur.isSelected &&
+    prev.photo === cur.photo
+  )
+}
+
+function advancePhoto(props: IProps) {
   const onSelected = () => {
     if (props.onSelected) props.onSelected(props.photo)
   }
@@ -33,3 +41,5 @@ export function AdvancePhoto(props: IProps) {
     </div>
   )
 }
+
+export const AdvancePhoto = React.memo(advancePhoto, shouldUpdate)

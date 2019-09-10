@@ -4,7 +4,7 @@ interface IProps {
   url: string
 }
 
-export const Photo = (props: IProps) => {
+const photo = (props: IProps) => {
   return (
     <div className="photo has-background-grey">
       <figure className="image is-square">
@@ -13,3 +13,5 @@ export const Photo = (props: IProps) => {
     </div>
   )
 }
+
+export const Photo = React.memo(photo)
