@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 
 import { List, Map } from 'immutable'
+import { CSSTransitionGroup } from 'react-transition-group'
 import { AdvancePhoto } from '../../components'
 import { IPhoto } from '../../core/index'
 
@@ -25,12 +26,13 @@ export const PhotoGrid = (props: IProps) => {
 
   const getPhotos = (photos: List<IPhoto>) => {
     const { isCheckBoxVisible, selectedPhoto } = props
-    return photos.map(p => (
+    return photos.map((p, i) => (
       <div
         className="column is-narrow"
         key={p.position}
         onMouseEnter={() => onMouseEnter(p.position)}
         onMouseLeave={onMouseLeave}
+        style={{ transitionDelay: `${i * 0.05}s` }}
       >
         <AdvancePhoto
           photo={p}
@@ -43,11 +45,18 @@ export const PhotoGrid = (props: IProps) => {
   }
 
   return (
-    <div className="columns is-multiline is-gapless is-mobile">
-      <div className="column is-full">
-        <div className="skeleton" />
-      </div>
+    <CSSTransitionGroup
+      className="columns is-multiline is-gapless"
+      component="div"
+      transitionName="photo-animation"
+      transitionEnterTimeout={2000}
+      transitionLeave={false}
+      transitionAppear={true}
+      transitionAppearTimeout={2000}
+    >
+      <div className="column is-full" />
+      <div key={-1} className="skeleton" />
       {getPhotos(props.photos)}
-    </div>
+    </CSSTransitionGroup>
   )
 }

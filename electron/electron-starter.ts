@@ -17,16 +17,22 @@ function createWindow() {
   })
 
   // and load the index.html of the app.
-  mainWindow.loadURL('http://localhost:3000')
+  mainWindow.loadURL('http://127.0.0.1:3000')
   // mainWindow.setMenu(null)
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools()
 
   ipcMain.on('open-filepicker-for-pics', (event: any) => {
-    dialog.showOpenDialog(
-      { properties: ['multiSelections', 'openFile'] },
-      files => event.sender.send('selected-pic', files))
+    if (mainWindow) {
+      dialog.showOpenDialog(
+        mainWindow,
+        {
+          properties: ['multiSelections', 'openFile'],
+          filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }]
+        }
+      ).then(files => event.sender.send('selected-pic', files.filePaths))
+    }
   })
 
   // Emitted when the window is closed.

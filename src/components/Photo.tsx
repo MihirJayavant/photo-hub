@@ -5,10 +5,11 @@ interface IProps {
 }
 
 const photo = (props: IProps) => {
+  const src = 'file://' + props.url
   return (
     <div className="photo has-background-grey">
       <figure className="image is-square">
-        <img src={props.url} alt="favourite" />
+        <img src={src} alt="favourite" />
       </figure>
     </div>
   )
