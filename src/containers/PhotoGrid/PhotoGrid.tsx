@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 
 import { List, Map } from 'immutable'
-import { CSSTransitionGroup } from 'react-transition-group'
+import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { AdvancePhoto } from '../../components'
 import { IPhoto } from '../../core/index'
 
@@ -27,36 +27,34 @@ export const PhotoGrid = (props: IProps) => {
   const getPhotos = (photos: List<IPhoto>) => {
     const { isCheckBoxVisible, selectedPhoto } = props
     return photos.map((p, i) => (
-      <div
-        className="column is-narrow"
+      <CSSTransition
         key={p.position}
-        onMouseEnter={() => onMouseEnter(p.position)}
-        onMouseLeave={onMouseLeave}
-        style={{ transitionDelay: `${i * 0.05}s` }}
+        classNames="photo-animation"
+        timeout={{ enter: 2000, exit: 0 }}
       >
-        <AdvancePhoto
-          photo={p}
-          onSelected={onSelection}
-          isCheckboxVisible={isCheckBoxVisible || mousePosition === p.position}
-          isSelected={selectedPhoto ? selectedPhoto.has(p.position) : false}
-        />
-      </div>
+        <div
+          className="column is-narrow"
+          onMouseEnter={() => onMouseEnter(p.position)}
+          onMouseLeave={onMouseLeave}
+          style={{ transitionDelay: `${i * 0.05}s` }}
+        >
+          <AdvancePhoto
+            photo={p}
+            onSelected={onSelection}
+            isCheckboxVisible={isCheckBoxVisible || mousePosition === p.position}
+            isSelected={selectedPhoto ? selectedPhoto.has(p.position) : false}
+          />
+        </div>
+      </CSSTransition>
     ))
   }
 
   return (
-    <CSSTransitionGroup
-      className="columns is-multiline is-gapless"
-      component="div"
-      transitionName="photo-animation"
-      transitionEnterTimeout={2000}
-      transitionLeave={false}
-      transitionAppear={true}
-      transitionAppearTimeout={2000}
-    >
-      <div className="column is-full" />
-      <div key={-1} className="skeleton" />
+    <TransitionGroup className="columns is-multiline" component="div">
+      <CSSTransition key={-1} classNames="photo-animation" timeout={{ enter: 500, exit: 0 }}>
+        <div className="skeleton column is-full" />
+      </CSSTransition>
       {getPhotos(props.photos)}
-    </CSSTransitionGroup>
+    </TransitionGroup>
   )
 }
