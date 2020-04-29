@@ -4,7 +4,7 @@ interface IProps {
   url: string
 }
 
-const photo = (props: IProps) => {
+function photo(props: IProps) {
   const src = 'file://' + props.url
   return (
     <div className="photo has-background-grey">

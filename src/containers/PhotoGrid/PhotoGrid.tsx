@@ -4,6 +4,7 @@ import { List, Map } from 'immutable'
 import { CSSTransition, TransitionGroup } from 'react-transition-group'
 import { AdvancePhoto } from '../../components'
 import { IPhoto } from '../../core/index'
+import { ZoomInTransition } from '../../hoc'
 
 // tslint:disable:jsx-no-lambda
 
@@ -27,11 +28,7 @@ export const PhotoGrid = (props: IProps) => {
   const getPhotos = (photos: List<IPhoto>) => {
     const { isCheckBoxVisible, selectedPhoto } = props
     return photos.map((p, i) => (
-      <CSSTransition
-        key={p.position}
-        classNames="photo-animation"
-        timeout={{ enter: 2000, exit: 0 }}
-      >
+      <ZoomInTransition key={p.position}>
         <div
           className="column is-narrow"
           onMouseEnter={() => onMouseEnter(p.position)}
@@ -45,15 +42,15 @@ export const PhotoGrid = (props: IProps) => {
             isSelected={selectedPhoto ? selectedPhoto.has(p.position) : false}
           />
         </div>
-      </CSSTransition>
+      </ZoomInTransition>
     ))
   }
 
   return (
     <TransitionGroup className="columns is-multiline" component="div">
-      <CSSTransition key={-1} classNames="photo-animation" timeout={{ enter: 500, exit: 0 }}>
+      <ZoomInTransition key={-1}>
         <div className="skeleton column is-full" />
-      </CSSTransition>
+      </ZoomInTransition>
       {getPhotos(props.photos)}
     </TransitionGroup>
   )
