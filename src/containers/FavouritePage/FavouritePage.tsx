@@ -4,19 +4,20 @@ import { List, Map } from 'immutable'
 import { connect } from 'react-redux'
 import { IPhoto } from '../../core'
 import { ElectronImagePicker } from '../../infrastructure'
-import { addFavourite, deleteFavourite, getFavPhotos, IState } from '../../store'
+import * as store from '../../store'
 import { PhotoGrid } from '../PhotoGrid'
 
 interface IProps {
   photos: List<IPhoto>
   addFavourite: (url: string[], startPosition: number) => void
   deleteFavourite: (selectedPhotos: Map<number, IPhoto>) => void
+  loadFavourite: () => void
 }
 
 const picker = new ElectronImagePicker()
 
 function FavouritePage(props: IProps) {
-  const { photos } = props
+  const { photos, addFavourite, loadFavourite } = props
   const [selectedPhoto, setSelectedPhoto] = useState(Map<number, IPhoto>())
 
   const onBtnClick = () => {
@@ -34,10 +35,14 @@ function FavouritePage(props: IProps) {
 
   useEffect(() => {
     picker.onImageSelected(files => {
-      if (files) props.addFavourite(files, photos.count())
+      if (files) addFavourite(files, photos.count())
     })
     return () => picker.dispose()
-  }, [photos])
+  }, [photos, addFavourite])
+
+  useEffect(() => {
+    loadFavourite()
+  }, [loadFavourite])
 
   const getIcon = () => {
     return selectedPhoto.count() === 0 ? (
@@ -55,23 +60,21 @@ function FavouritePage(props: IProps) {
         isCheckBoxVisible={selectedPhoto.count() > 0}
         selectedPhoto={selectedPhoto}
       />
-      <a className="floating-btn" onClick={onBtnClick}>
+      <div className="floating-btn" onClick={onBtnClick}>
         <span className="icon">{getIcon()}</span>
-      </a>
+      </div>
     </div>
   )
 }
 
-const mapStateToProps = (state: IState) => ({
-  photos: getFavPhotos(state)
+const mapStateToProps = (state: store.IState) => ({
+  photos: store.getFavPhotos(state),
 })
 
 const mapDispatchToProps = {
-  addFavourite,
-  deleteFavourite
+  addFavourite: store.addFavourite,
+  deleteFavourite: store.deleteFavourite,
+  loadFavourite: store.loadFavourite,
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FavouritePage)
+export default connect(mapStateToProps, mapDispatchToProps)(FavouritePage)

@@ -1,20 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
-import { connect } from 'react-redux'
 import { BrowserRouter } from 'react-router-dom'
-import { loadDatabase, IState, getDb } from '../../store'
 import { AppRoutes } from './AppRoutes'
 
-interface IProps {
-  db: any
-  loadDatabase: () => void
-}
-
-const App = (props: IProps) => {
-  useEffect(() => {
-    props.loadDatabase()
-  }, [])
-
+function App() {
   return (
     <BrowserRouter>
       <div className="App has-text-white dark-scroll">
@@ -24,15 +13,4 @@ const App = (props: IProps) => {
   )
 }
 
-const mapStateToProps = (state: IState) => ({
-  db: getDb(state)
-})
-
-const mapDispatchToProps = {
-  loadDatabase
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(App)
+export default App

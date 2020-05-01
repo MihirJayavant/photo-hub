@@ -18,7 +18,7 @@ function shouldUpdate(prev: IProps, cur: IProps) {
   )
 }
 
-function advancePhoto(props: IProps) {
+function photoView(props: IProps) {
   const onSelected = () => {
     if (props.onSelected) props.onSelected(props.photo)
   }
@@ -42,4 +42,4 @@ function advancePhoto(props: IProps) {
   )
 }
 
-export const AdvancePhoto = React.memo(advancePhoto, shouldUpdate)
+export const PhotoView = React.memo(photoView, shouldUpdate)

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 
 import { List, Map } from 'immutable'
-import { CSSTransition, TransitionGroup } from 'react-transition-group'
-import { AdvancePhoto } from '../../components'
+import { TransitionGroup } from 'react-transition-group'
+import { PhotoView } from '../../components'
 import { IPhoto } from '../../core/index'
 import { ZoomInTransition } from '../../hoc'
 
@@ -35,7 +35,7 @@ export const PhotoGrid = (props: IProps) => {
           onMouseLeave={onMouseLeave}
           style={{ transitionDelay: `${i * 0.05}s` }}
         >
-          <AdvancePhoto
+          <PhotoView
             photo={p}
             onSelected={onSelection}
             isCheckboxVisible={isCheckBoxVisible || mousePosition === p.position}
