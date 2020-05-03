@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { List, Map } from 'immutable'
+import { List, Set } from 'immutable'
 import { connect } from 'react-redux'
 import { IPhoto } from '../../core'
 import { ElectronImagePicker } from '../../infrastructure'
@@ -10,7 +10,7 @@ import { PhotoGrid } from '../PhotoGrid'
 interface IProps {
   photos: List<IPhoto>
   addFavourite: (url: string[], startPosition: number) => void
-  deleteFavourite: (selectedPhotos: Map<number, IPhoto>) => void
+  deleteFavourite: (selectedPhotos: Set<number>) => void
   loadFavourite: () => void
 }
 
@@ -18,19 +18,19 @@ const picker = new ElectronImagePicker()
 
 function FavouritePage(props: IProps) {
   const { photos, addFavourite, loadFavourite } = props
-  const [selectedPhoto, setSelectedPhoto] = useState(Map<number, IPhoto>())
+  const [selectedPhoto, setSelectedPhoto] = useState(Set<number>())
 
   const onBtnClick = () => {
     if (selectedPhoto.count() === 0) picker.open()
     else {
       props.deleteFavourite(selectedPhoto)
-      setSelectedPhoto(Map<number, IPhoto>())
+      setSelectedPhoto(Set<number>())
     }
   }
 
   const onSelection = (photo: IPhoto) => {
-    if (selectedPhoto.has(photo.position)) setSelectedPhoto(selectedPhoto.remove(photo.position))
-    else setSelectedPhoto(selectedPhoto.set(photo.position, photo))
+    if (selectedPhoto.has(photo.id)) setSelectedPhoto(selectedPhoto.remove(photo.id))
+    else setSelectedPhoto(selectedPhoto.add(photo.id))
   }
 
   useEffect(() => {

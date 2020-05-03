@@ -1,5 +1,10 @@
-import { List, Map } from 'immutable'
-import { IPhoto, IAsyncDataSuccessAction, IAsyncDataErrorAction, IAsyncDataLoadAction } from '../../core'
+import { List, Set } from 'immutable'
+import {
+  IPhoto,
+  IAsyncDataSuccessAction,
+  IAsyncDataErrorAction,
+  IAsyncDataLoadAction,
+} from '../../core'
 
 // Action Types
 
@@ -8,7 +13,7 @@ export enum FavouriteActionTypes {
   SUCCESS = '[FavouritePage] Success',
   ERROR = '[FavouritePage] Error',
   ADD = '[FavouritePage] Add',
-  DELETE = '[FavouritePage] Delete'
+  DELETE = '[FavouritePage] Delete',
 }
 
 // Action Interface
@@ -26,49 +31,51 @@ export interface IErrorFavouriteAction extends IAsyncDataErrorAction {
 }
 export interface IAddFavouriteAction {
   type: FavouriteActionTypes.ADD
-  photos: IPhoto[]
+  photoUrls: string[]
 }
 export interface IDeleteFavouriteAction {
   type: FavouriteActionTypes.DELETE
-  selectedPhotos: Map<number, IPhoto>
+  selectedPhotos: Set<number>
 }
 
 // Action Creators
 
 export function loadFavourite(): ILoadFavouriteAction {
   return {
-    type: FavouriteActionTypes.LOAD
+    type: FavouriteActionTypes.LOAD,
   }
 }
 
 export function successFavourite(photos: IPhoto[]): ISuccessFavouriteAction {
   return {
     data: List(photos),
-    type: FavouriteActionTypes.SUCCESS
+    type: FavouriteActionTypes.SUCCESS,
   }
 }
 
 export function errorFavourite(error: string): IErrorFavouriteAction {
   return {
     error,
-    type: FavouriteActionTypes.ERROR
+    type: FavouriteActionTypes.ERROR,
   }
 }
-export function addFavourite(urls: string[], startPosition: number): IAddFavouriteAction {
-  const photos: IPhoto[] = urls.map((p, i) => ({ url: p, position: i + startPosition }));
+export function addFavourite(photoUrls: string[]): IAddFavouriteAction {
   return {
-    photos,
-    type: FavouriteActionTypes.ADD
+    photoUrls,
+    type: FavouriteActionTypes.ADD,
   }
 }
 
-export function deleteFavourite(selectedPhotos: Map<number, IPhoto>): IDeleteFavouriteAction {
-
+export function deleteFavourite(selectedPhotos: Set<number>): IDeleteFavouriteAction {
   return {
     selectedPhotos,
-    type: FavouriteActionTypes.DELETE
+    type: FavouriteActionTypes.DELETE,
   }
 }
 
-export type FavouriteAction = ILoadFavouriteAction
-  | ISuccessFavouriteAction | IErrorFavouriteAction | IAddFavouriteAction | IDeleteFavouriteAction
+export type FavouriteAction =
+  | ILoadFavouriteAction
+  | ISuccessFavouriteAction
+  | IErrorFavouriteAction
+  | IAddFavouriteAction
+  | IDeleteFavouriteAction
