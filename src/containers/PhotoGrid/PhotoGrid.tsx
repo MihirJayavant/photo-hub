@@ -11,7 +11,7 @@ import { ZoomInTransition } from '../../hoc'
 interface IProps {
   photos: List<IPhoto>
   isCheckBoxVisible?: boolean
-  selectedPhoto?: Set<number>
+  selectedPhotos?: Set<number>
   onSelection?: (photo: IPhoto) => void
 }
 
@@ -26,7 +26,7 @@ export const PhotoGrid = (props: IProps) => {
   const onMouseLeave = () => setMousePosition(-1)
 
   const getPhotos = (photos: List<IPhoto>) => {
-    const { isCheckBoxVisible, selectedPhoto } = props
+    const { isCheckBoxVisible, selectedPhotos: selectedPhoto } = props
     return photos.map((p, i) => (
       <ZoomInTransition key={p.id}>
         <div

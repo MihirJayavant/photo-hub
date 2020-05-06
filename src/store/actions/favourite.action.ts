@@ -14,6 +14,8 @@ export enum FavouriteActionTypes {
   ERROR = '[FavouritePage] Error',
   ADD = '[FavouritePage] Add',
   DELETE = '[FavouritePage] Delete',
+  SELECT = '[FavouritePage] Select',
+  RESET_SELECTED = '[FavouritePage] Reset Selected'
 }
 
 // Action Interface
@@ -36,6 +38,15 @@ export interface IAddFavouriteAction {
 export interface IDeleteFavouriteAction {
   type: FavouriteActionTypes.DELETE
   selectedPhotos: Set<number>
+}
+
+export interface ISelectFavouriteAction {
+  type: FavouriteActionTypes.SELECT
+  photoId: number
+}
+
+export interface IResetSelectedFavouriteAction {
+  type: FavouriteActionTypes.RESET_SELECTED
 }
 
 // Action Creators
@@ -73,9 +84,24 @@ export function deleteFavourite(selectedPhotos: Set<number>): IDeleteFavouriteAc
   }
 }
 
+export function selectFavourite(photoId: number): ISelectFavouriteAction {
+  return {
+    photoId,
+    type: FavouriteActionTypes.SELECT,
+  }
+}
+
+export function resetSelectedFavourite(): IResetSelectedFavouriteAction {
+  return {
+    type: FavouriteActionTypes.RESET_SELECTED,
+  }
+}
+
 export type FavouriteAction =
   | ILoadFavouriteAction
   | ISuccessFavouriteAction
   | IErrorFavouriteAction
   | IAddFavouriteAction
   | IDeleteFavouriteAction
+  | ISelectFavouriteAction
+  | IResetSelectedFavouriteAction

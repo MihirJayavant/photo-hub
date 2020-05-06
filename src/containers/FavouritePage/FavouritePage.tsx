@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import { List, Set } from 'immutable'
 import { connect } from 'react-redux'
@@ -9,31 +9,35 @@ import { PhotoGrid } from '../PhotoGrid'
 
 interface IProps {
   photos: List<IPhoto>
+  selectedPhotos: Set<number>
+  isAnyPhotoSelected: boolean
   addFavourite: (url: string[]) => void
   deleteFavourite: (selectedPhotos: Set<number>) => void
   loadFavourite: () => void
+  selectPhoto: (photoId: number) => void
 }
 
 const picker = new ElectronImagePicker()
 
 function FavouritePage(props: IProps) {
-  const { photos, addFavourite, loadFavourite } = props
-  const [selectedPhoto, setSelectedPhoto] = useState(Set<number>())
+  const {
+    photos,
+    selectedPhotos,
+    isAnyPhotoSelected,
+    addFavourite,
+    loadFavourite,
+    selectPhoto,
+  } = props
+
+  console.log(selectedPhotos.toArray())
 
   const onBtnClick = () => {
-    if (selectedPhoto.count() === 0) picker.open()
-    else {
-      props.deleteFavourite(selectedPhoto)
-      setSelectedPhoto(Set<number>())
-    }
+    if (isAnyPhotoSelected) props.deleteFavourite(selectedPhotos)
+    else picker.open()
   }
 
   const onSelection = (photo: IPhoto) => {
-    if (selectedPhoto.has(photo.id)) {
-      setSelectedPhoto(selectedPhoto.remove(photo.id))
-    } else {
-      setSelectedPhoto(selectedPhoto.add(photo.id))
-    }
+    selectPhoto(photo.id)
   }
 
   useEffect(() => {
@@ -48,11 +52,7 @@ function FavouritePage(props: IProps) {
   }, [loadFavourite])
 
   const getIcon = () => {
-    return selectedPhoto.count() === 0 ? (
-      <i className="fas fa-plus" />
-    ) : (
-      <i className="far fa-trash-alt" />
-    )
+    return isAnyPhotoSelected ? <i className="far fa-trash-alt" /> : <i className="fas fa-plus" />
   }
 
   return (
@@ -60,8 +60,8 @@ function FavouritePage(props: IProps) {
       <PhotoGrid
         photos={photos}
         onSelection={onSelection}
-        isCheckBoxVisible={selectedPhoto.count() > 0}
-        selectedPhoto={selectedPhoto}
+        isCheckBoxVisible={isAnyPhotoSelected}
+        selectedPhotos={selectedPhotos}
       />
       <div className="floating-btn" onClick={onBtnClick}>
         <span className="icon">{getIcon()}</span>
@@ -71,13 +71,16 @@ function FavouritePage(props: IProps) {
 }
 
 const mapStateToProps = (state: store.IState) => ({
-  photos: store.getFavPhotos(state),
+  photos: store.getFavouritePhotos(state),
+  selectedPhotos: store.getFavouriteSelectedPhotos(state),
+  isAnyPhotoSelected: store.getFavouriteIsAnyPhotoSelected(state),
 })
 
 const mapDispatchToProps = {
   addFavourite: store.addFavourite,
   deleteFavourite: store.deleteFavourite,
   loadFavourite: store.loadFavourite,
+  selectPhoto: store.selectFavourite,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(FavouritePage)

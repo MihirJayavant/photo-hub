@@ -1,13 +1,14 @@
-import { List } from 'immutable'
-import { deletePhotos, getInitialState, IAsyncData, IPhoto, withAsyncDataReducer } from '../../core'
+import { List, Set } from 'immutable'
+import { deletePhotos, getInitialState, IAsyncData, IPhoto, withAsyncDataReducer, selectPhoto } from '../../core'
 import { FavouriteAction, FavouriteActionTypes } from '../actions'
 
-const mock: IPhoto[] = []
-
-export interface IFavouriteState extends IAsyncData<List<IPhoto>> {}
+export interface IFavouriteState extends IAsyncData<List<IPhoto>> {
+  selectedPhotos: Set<number>
+}
 
 export const initialState: IFavouriteState = {
-  ...getInitialState<List<IPhoto>>(List<IPhoto>(mock)),
+  ...getInitialState(List<IPhoto>()),
+  selectedPhotos: Set<number>()
 }
 
 export function baseReducer(state = initialState, action: FavouriteAction): IFavouriteState {
@@ -15,7 +16,18 @@ export function baseReducer(state = initialState, action: FavouriteAction): IFav
     case FavouriteActionTypes.DELETE:
       return {
         ...state,
+        selectedPhotos: Set<number>(),
         data: deletePhotos(state.data, action.selectedPhotos),
+      }
+    case FavouriteActionTypes.SELECT:
+      return {
+        ...state,
+        selectedPhotos: selectPhoto(state.selectedPhotos, action.photoId),
+      }
+    case FavouriteActionTypes.RESET_SELECTED:
+      return {
+        ...state,
+        selectedPhotos: Set<number>(),
       }
   }
   return state
