@@ -1,11 +1,18 @@
 .advance-photo
   position: relative
+  &:hover
+    .photo-checkbox
+      display: block
 
 .photo-checkbox
+  display: none
   position: absolute
   right: 26px
   top: 8px
   z-index: 40
+
+  &.active
+    display: block
 
 .photo-animation-enter
   opacity: 0

@@ -29,8 +29,6 @@ function FavouritePage(props: IProps) {
     selectPhoto,
   } = props
 
-  console.log(selectedPhotos.toArray())
-
   const onBtnClick = () => {
     if (isAnyPhotoSelected) props.deleteFavourite(selectedPhotos)
     else picker.open()

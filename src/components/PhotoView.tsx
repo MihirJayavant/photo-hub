@@ -24,10 +24,9 @@ function photoView(props: IProps) {
   }
 
   const getCheckbox = () => {
-    if (!props.isCheckboxVisible) return null
-
+    const active = props.isCheckboxVisible ? 'active' : ''
     return (
-      <label className="photo-checkbox checkbox">
+      <label className={'photo-checkbox checkbox ' + active}>
         <input type="checkbox" onChange={onSelected} checked={props.isSelected} />
         <span className="checkmark" />
       </label>

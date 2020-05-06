@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 
 import { List, Set } from 'immutable'
 import { TransitionGroup } from 'react-transition-group'
@@ -16,29 +16,19 @@ interface IProps {
 }
 
 export const PhotoGrid = (props: IProps) => {
-  const [mousePosition, setMousePosition] = useState(-1)
-
   const onSelection = (photo: IPhoto) => {
     if (props.onSelection) props.onSelection(photo)
   }
-
-  const onMouseEnter = (position: number) => setMousePosition(position)
-  const onMouseLeave = () => setMousePosition(-1)
 
   const getPhotos = (photos: List<IPhoto>) => {
     const { isCheckBoxVisible, selectedPhotos: selectedPhoto } = props
     return photos.map((p, i) => (
       <ZoomInTransition key={p.id}>
-        <div
-          className="column is-narrow"
-          onMouseEnter={() => onMouseEnter(p.id)}
-          onMouseLeave={onMouseLeave}
-          style={{ transitionDelay: `${i * 0.05}s` }}
-        >
+        <div className="column is-narrow" style={{ transitionDelay: `${i * 0.05}s` }}>
           <PhotoView
             photo={p}
             onSelected={onSelection}
-            isCheckboxVisible={isCheckBoxVisible || mousePosition === p.id}
+            isCheckboxVisible={isCheckBoxVisible}
             isSelected={selectedPhoto ? selectedPhoto.has(p.id) : false}
           />
         </div>
