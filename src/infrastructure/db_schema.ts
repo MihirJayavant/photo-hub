@@ -9,3 +9,5 @@ export interface IDbSchema extends DBSchema {
     key: number
   }
 }
+
+export type StoreCollection = ['favourites']

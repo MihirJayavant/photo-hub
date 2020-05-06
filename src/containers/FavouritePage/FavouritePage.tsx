@@ -9,7 +9,7 @@ import { PhotoGrid } from '../PhotoGrid'
 
 interface IProps {
   photos: List<IPhoto>
-  addFavourite: (url: string[], startPosition: number) => void
+  addFavourite: (url: string[]) => void
   deleteFavourite: (selectedPhotos: Set<number>) => void
   loadFavourite: () => void
 }
@@ -29,13 +29,16 @@ function FavouritePage(props: IProps) {
   }
 
   const onSelection = (photo: IPhoto) => {
-    if (selectedPhoto.has(photo.id)) setSelectedPhoto(selectedPhoto.remove(photo.id))
-    else setSelectedPhoto(selectedPhoto.add(photo.id))
+    if (selectedPhoto.has(photo.id)) {
+      setSelectedPhoto(selectedPhoto.remove(photo.id))
+    } else {
+      setSelectedPhoto(selectedPhoto.add(photo.id))
+    }
   }
 
   useEffect(() => {
     picker.onImageSelected(files => {
-      if (files) addFavourite(files, photos.count())
+      if (files) addFavourite(files)
     })
     return () => picker.dispose()
   }, [photos, addFavourite])

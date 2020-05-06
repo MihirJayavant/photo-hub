@@ -1,20 +1,25 @@
 import { IDBPDatabase, IDBPTransaction } from 'idb'
-import { select, put } from 'redux-saga/effects'
+import { put } from 'redux-saga/effects'
 import { IPhoto } from '../../core'
-import { IDbSchema, openDatabase } from '../../infrastructure'
-import { IAddFavouriteAction, successFavourite, loadFavourite } from '../actions'
-import { getFavPhotos } from '../selectors'
-import { List } from 'immutable'
+import { IDbSchema, openDatabase, StoreCollection } from '../../infrastructure'
+import {
+  IAddFavouriteAction,
+  successFavourite,
+  loadFavourite,
+  IDeleteFavouriteAction,
+} from '../actions'
 
 export function* addFavEffect(action: IAddFavouriteAction) {
   const photos = action.photoUrls
-
   const db: IDBPDatabase<IDbSchema> = yield openDatabase()
-  const tx: IDBPTransaction<IDbSchema> = yield db.transaction('favourites', 'readwrite')
+  const tx: IDBPTransaction<IDbSchema, StoreCollection> = yield db.transaction(
+    'favourites',
+    'readwrite'
+  )
 
-  yield photos.forEach(photo => {
-    tx.db.add('favourites', { url: photo })
-  })
+  for (const photo of photos) {
+    yield tx.store.add({ url: photo })
+  }
 
   yield tx.done
   yield db.close()
@@ -27,14 +32,18 @@ export function* loadFavEffect() {
   yield put(successFavourite(photos))
 }
 
-export function* deleteFavEffect() {
-  const photos: List<IPhoto> = yield select(getFavPhotos)
+export function* deleteFavEffect(action: IDeleteFavouriteAction) {
+  const selected: number[] = yield action.selectedPhotos.toArray()
   const db: IDBPDatabase<IDbSchema> = yield openDatabase()
-  const tx: IDBPTransaction<IDbSchema> = yield db.transaction('favourites', 'readwrite')
-  yield tx.db.clear('favourites')
-  yield photos.forEach(photo => {
-    tx.db.add('favourites', photo)
-  })
+  const tx: IDBPTransaction<IDbSchema, StoreCollection> = yield db.transaction(
+    'favourites',
+    'readwrite'
+  )
+
+  for (const id of selected) {
+    yield tx.store.delete(id)
+  }
+
   yield tx.done
   yield db.close()
 }
