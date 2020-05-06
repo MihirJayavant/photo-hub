@@ -8,6 +8,7 @@ export interface IProps {
   isCheckboxVisible?: boolean
   isSelected?: boolean
   onSelected?: (photo: IPhoto) => void
+  onClick?: (photo: IPhoto) => void
 }
 
 function shouldUpdate(prev: IProps, cur: IProps) {
@@ -23,6 +24,17 @@ function photoView(props: IProps) {
     if (props.onSelected) props.onSelected(props.photo)
   }
 
+  const onClick = () => {
+    if (props.onClick && props.isCheckboxVisible) props.onClick(props.photo)
+  }
+
+  const getClass = () => {
+    const defaultClass = 'photoview '
+    const active = props.isSelected ? 'active ' : ''
+    const pointer = props.isCheckboxVisible ? 'pointer' : ''
+    return defaultClass + active + pointer
+  }
+
   const getCheckbox = () => {
     const active = props.isCheckboxVisible ? 'active' : ''
     return (
@@ -34,7 +46,7 @@ function photoView(props: IProps) {
   }
 
   return (
-    <div className="advance-photo">
+    <div className={getClass()} onClick={onClick}>
       {getCheckbox()}
       <Photo url={props.photo.url} />
     </div>

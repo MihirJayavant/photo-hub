@@ -1,8 +1,14 @@
-.advance-photo
+.photoview
   position: relative
   &:hover
     .photo-checkbox
       display: block
+
+  &.active
+    border: 3px solid $cyan
+
+  &.pointer
+    cursor: pointer
 
 .photo-checkbox
   display: none
