@@ -13,3 +13,16 @@ export function ZoomInTransition(props: PropsWithChildren<{}>) {
     </CSSTransition>
   )
 }
+
+interface IDelayTransitionProps {
+  index: number
+  className: string
+}
+
+export function DelayTransition(props: PropsWithChildren<IDelayTransitionProps>) {
+  return (
+    <div className={props.className} style={{ transitionDelay: `${props.index * 0.05}s` }}>
+      {props.children}
+    </div>
+  )
+}
