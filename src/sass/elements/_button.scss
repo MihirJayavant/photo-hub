@@ -1,0 +1,23 @@
+.floating-btn {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 60px;
+  height: 60px;
+  bottom: 20px;
+  right: 20px;
+  border: 0px;
+  border-radius: 50%;
+  background-color: hsla(217, 71%, 53%, 0.75);
+  color: white;
+  cursor: pointer;
+  backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  &:hover {
+    color: white;
+  }
+  .icon {
+    font-size: 1.3rem;
+  }
+}

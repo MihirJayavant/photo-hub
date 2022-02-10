@@ -1,7 +1,7 @@
-import { IDBPDatabase, IDBPTransaction } from 'idb'
+import { IDBPDatabase } from 'idb'
 import { put } from 'redux-saga/effects'
 import { IPhoto } from '../../core'
-import { IDbSchema, openDatabase, StoreCollection } from '../../infrastructure'
+import { IDbSchema, openDatabase } from '../../infrastructure'
 import {
   IAddFavouriteAction,
   successFavourite,
