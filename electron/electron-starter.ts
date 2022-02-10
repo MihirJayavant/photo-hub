@@ -1,5 +1,6 @@
 // Modules to control application life and create native browser window
 import { app, BrowserWindow, ipcMain, dialog } from 'electron'
+import { join } from 'path'
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -9,11 +10,13 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     height: 700,
+    width: 1200,
     webPreferences: {
-      nodeIntegration: true,
-      webSecurity: false
+      nodeIntegration: false, // is default value after Electron v5
+      contextIsolation: true, // protect against prototype pollution
+      preload: join(__dirname, 'preload.js'),
+      webSecurity: false,
     },
-    width: 1200
   })
 
   // and load the index.html of the app.
@@ -25,13 +28,12 @@ function createWindow() {
 
   ipcMain.on('open-filepicker-for-pics', (event: any) => {
     if (mainWindow) {
-      dialog.showOpenDialog(
-        mainWindow,
-        {
+      dialog
+        .showOpenDialog(mainWindow, {
           properties: ['multiSelections', 'openFile'],
-          filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }]
-        }
-      ).then(files => event.sender.send('selected-pic', files.filePaths))
+          filters: [{ name: 'Images', extensions: ['jpg', 'png', 'gif'] }],
+        })
+        .then(files => event.sender.send('selected-pic', files.filePaths))
     }
   })
 

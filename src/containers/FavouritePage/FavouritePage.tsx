@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import { List, Set } from 'immutable'
 import { connect } from 'react-redux'
 import { IPhoto } from '../../core'
-import { ElectronImagePicker } from '../../infrastructure'
+import { imagePicker } from '../../infrastructure'
 import * as store from '../../store'
 import { PhotoGrid } from '../PhotoGrid'
 
@@ -17,17 +17,11 @@ interface IProps {
   selectPhoto: (photoId: number) => void
 }
 
-const picker = new ElectronImagePicker()
+const picker = imagePicker
 
 function FavouritePage(props: IProps) {
-  const {
-    photos,
-    selectedPhotos,
-    isAnyPhotoSelected,
-    addFavourite,
-    loadFavourite,
-    selectPhoto,
-  } = props
+  const { photos, selectedPhotos, isAnyPhotoSelected, addFavourite, loadFavourite, selectPhoto } =
+    props
 
   const onBtnClick = () => {
     if (isAnyPhotoSelected) props.deleteFavourite(selectedPhotos)

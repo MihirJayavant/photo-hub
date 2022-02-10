@@ -13,7 +13,11 @@ interface IProps {
 
 function getLinks(items: IItem[]) {
   return items.map(p => (
-    <NavLink activeClassName="has-background-info	" className="navbar-item" to={p.link} key={p.text}>
+    <NavLink
+      className={({ isActive }) => 'navbar-item ' + (isActive ? 'has-background-info' : '')}
+      to={p.link}
+      key={p.text}
+    >
       {p.text}
     </NavLink>
   ))

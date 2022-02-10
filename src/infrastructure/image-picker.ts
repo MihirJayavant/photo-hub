@@ -1,31 +1,26 @@
-import { IpcRenderer } from 'electron'
-import { IImagePicker } from '../core';
-
-/* tslint:disable: interface-name */
-declare global {
-  interface Window {
-    require: (
-      module: 'electron'
-    ) => {
-      ipcRenderer: IpcRenderer
-    }
-  }
-}
-
-const { ipcRenderer } = window.require('electron')
+import { IImagePicker } from '../core'
 
 export class ElectronImagePicker implements IImagePicker {
-
+  ipc: any = (window as any).ipc
   public open() {
-    ipcRenderer.send('open-filepicker-for-pics')
+    this.ipc.send('open-filepicker-for-pics')
   }
 
   public onImageSelected(callback: (files: string[] | null) => void) {
-    ipcRenderer.on('selected-pic', (event: any, files: string[] | null) => callback(files))
+    this.ipc.receive('selected-pic', (event: any, files: string[] | null) => callback(files))
   }
 
   public dispose() {
-    ipcRenderer.removeAllListeners('selected-pic')
+    this.ipc.dispose('selected-pic')
   }
-
 }
+
+export class BrowserImagePicker implements IImagePicker {
+  open(): void {}
+  onImageSelected(callback: (files: string[] | null) => void): void {}
+  dispose(): void {}
+}
+
+export const imagePicker = (window as any).ipc
+  ? new ElectronImagePicker()
+  : new BrowserImagePicker()

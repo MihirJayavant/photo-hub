@@ -12,5 +12,5 @@
     "isolatedModules": true,
     "types": ["node"]
   },
-  "files": ["electron-starter.ts"]
+  "files": ["electron-starter.ts", "preload.ts"]
 }

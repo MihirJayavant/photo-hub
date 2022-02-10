@@ -10,20 +10,21 @@ import {
 } from '../actions'
 
 export function* addFavEffect(action: IAddFavouriteAction) {
-  const photos = action.photoUrls
-  const db: IDBPDatabase<IDbSchema> = yield openDatabase()
-  const tx: IDBPTransaction<IDbSchema, StoreCollection> = yield db.transaction(
-    'favourites',
-    'readwrite'
-  )
-
-  for (const photo of photos) {
-    yield tx.store.add({ url: photo })
+  try {
+    const photos = action.photoUrls
+    const db: IDBPDatabase<IDbSchema> = yield openDatabase()
+    const tx = yield db.transaction('favourites', 'readwrite')
+    const promises: Array<Promise<any>> = []
+    for (const photo of photos) {
+      promises.push(tx.store.add({ url: photo }))
+    }
+    yield promises
+    yield tx.done
+    yield db.close()
+    yield put(loadFavourite())
+  } catch (error) {
+    console.error(error)
   }
-
-  yield tx.done
-  yield db.close()
-  yield put(loadFavourite())
 }
 export function* loadFavEffect() {
   const db: IDBPDatabase<IDbSchema> = yield openDatabase()
@@ -35,15 +36,12 @@ export function* loadFavEffect() {
 export function* deleteFavEffect(action: IDeleteFavouriteAction) {
   const selected: number[] = yield action.selectedPhotos.toArray()
   const db: IDBPDatabase<IDbSchema> = yield openDatabase()
-  const tx: IDBPTransaction<IDbSchema, StoreCollection> = yield db.transaction(
-    'favourites',
-    'readwrite'
-  )
-
+  const tx = yield db.transaction('favourites', 'readwrite')
+  const promises: Array<Promise<any>> = []
   for (const id of selected) {
-    yield tx.store.delete(id)
+    promises.push(tx.store.delete(id))
   }
-
+  yield promises
   yield tx.done
   yield db.close()
 }
